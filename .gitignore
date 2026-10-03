@@ -39,6 +39,10 @@ __pycache__/
 # k6 specific
 /LG_failures/k6_failure/setup_cloudlab.sh
 
+# vegeta specific
+/LG_failures/vegeta_failure/experiment/verify_model.py
+/LG_failures/vegeta_failure/experiment/verify_assigned_delays.py
+
 # Locally built binaries
 /LG_failures/wrk2_dsb/burst-server
 /LG_failures/k6_failure/k6
