@@ -1,0 +1,52 @@
+# Experiment data and logs
+*.csv
+*.csv.gz
+*.tsv
+*.tsv.gz
+*.log
+*.gob
+*.hdr
+*.hgr
+
+# Figures
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+*.pdf
+*.eps
+*.tif
+*.tiff
+
+# Generated result directories, at any depth
+results/
+results_*/
+output/
+outputs/
+figures/
+plots/
+arrivals_*/
+sut_arrivals/
+phase-smooth-data/
+experiments_phase_queued_sut*/
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Locally built binaries
+/LG_failures/wrk2_dsb/burst-server
+/LG_failures/k6_failure/k6
+/LG_failures/k6_failure/bin/
+/LG_failures/vegeta_failure/vegeta
+/LG_failures/vegeta_failure/bin/
+
+# Downloaded nghttp2 source and archives
+/LG_failures/h2load/nghttp2-*/
+/LG_failures/h2load/nghttp2-*.tar.*
+
+# Generated experiment TLS files
+/LG_failures/k6_failure/key.pem
+/LG_failures/k6_failure/cert.pem
