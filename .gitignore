@@ -36,6 +36,9 @@ experiments_phase_queued_sut*/
 __pycache__/
 *.py[cod]
 
+# k6 specific
+/LG_failures/k6_failure/setup_cloudlab.sh
+
 # Locally built binaries
 /LG_failures/wrk2_dsb/burst-server
 /LG_failures/k6_failure/k6
