@@ -46,6 +46,7 @@ __pycache__/
 # Downloaded nghttp2 source and archives
 /LG_failures/h2load/nghttp2-*/
 /LG_failures/h2load/nghttp2-*.tar.*
+/LG_failures/h2load/notes.txt
 
 # Generated experiment TLS files
 /LG_failures/k6_failure/key.pem
