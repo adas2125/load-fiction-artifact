@@ -1,0 +1,9 @@
+[submodule "LG_failures/wrk2_dsb/DeathStarBench"]
+	path = LG_failures/wrk2_dsb/DeathStarBench
+	url = https://github.com/delimitrou/DeathStarBench.git
+[submodule "LG_failures/vegeta_failure/LG_failures/vegeta_failure/vegeta-src"]
+	path = LG_failures/vegeta_failure/vegeta-src
+	url = https://github.com/tsenart/vegeta.git
+[submodule "LG_failures/k6_failure/k6-src"]
+	path = LG_failures/k6_failure/k6-src
+	url = https://github.com/grafana/k6.git
