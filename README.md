@@ -13,7 +13,7 @@ This repository contains experiments examining how load generators can send requ
 | [`LG_failures/k6_failure/`](LG_failures/k6_failure/README.md) | Investigates k6 arrival timing and latency measurements under different client CPU allocations, using HTTPS and connection churn. |
 | [`LG_failures/vegeta_failure/`](LG_failures/vegeta_failure/README.md) | Examines Vegeta request delivery and latency measurements against a phase-shifting server with limited concurrency. |
 | `xlg/` | Placeholder. |
-| `cilantro_experiment` | Placeholder. |
+| `cilantro_experiment/` | Placeholder. |
 
 ## Getting started
 
