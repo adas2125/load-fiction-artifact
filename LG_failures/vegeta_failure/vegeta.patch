@@ -1,0 +1,305 @@
+diff --git a/attack.go b/attack.go
+index 061285b..769965e 100644
+--- a/attack.go
++++ b/attack.go
+@@ -1,8 +1,10 @@
+ package main
+ 
+ import (
++	"bufio"
+ 	"crypto/tls"
+ 	"crypto/x509"
++	"encoding/json"
+ 	"errors"
+ 	"flag"
+ 	"fmt"
+@@ -49,6 +51,8 @@ func attackCmd() command {
+ 	fs.DurationVar(&opts.timeout, "timeout", vegeta.DefaultTimeout, "Requests timeout")
+ 	fs.Uint64Var(&opts.workers, "workers", vegeta.DefaultWorkers, "Initial number of workers")
+ 	fs.Uint64Var(&opts.maxWorkers, "max-workers", vegeta.DefaultMaxWorkers, "Maximum number of workers")
++	fs.StringVar(&opts.workersOutput, "workers-output", "", "Write worker usage JSON to this file")
++	fs.StringVar(&opts.workersTimelineOutput, "workers-timeline-output", "", "Write worker usage samples CSV to this file")
+ 	fs.IntVar(&opts.connections, "connections", vegeta.DefaultConnections, "Max open idle connections per target host")
+ 	fs.IntVar(&opts.maxConnections, "max-connections", vegeta.DefaultMaxConnections, "Max connections per target host")
+ 	fs.IntVar(&opts.redirects, "redirects", vegeta.DefaultRedirects, "Number of redirects to follow. -1 will not follow but marks as success")
+@@ -78,38 +82,40 @@ var (
+ 
+ // attackOpts aggregates the attack function command options
+ type attackOpts struct {
+-	name           string
+-	targetsf       string
+-	format         string
+-	outputf        string
+-	bodyf          string
+-	certf          string
+-	keyf           string
+-	rootCerts      csl
+-	http2          bool
+-	h2c            bool
+-	insecure       bool
+-	lazy           bool
+-	chunked        bool
+-	duration       time.Duration
+-	timeout        time.Duration
+-	rate           vegeta.Rate
+-	workers        uint64
+-	maxWorkers     uint64
+-	connections    int
+-	maxConnections int
+-	redirects      int
+-	maxBody        int64
+-	headers        headers
+-	proxyHeaders   headers
+-	laddr          localAddr
+-	keepalive      bool
+-	resolvers      csl
+-	unixSocket     string
+-	promAddr       string
+-	dnsTTL         time.Duration
+-	sessionTickets bool
+-	connectTo      map[string][]string
++	name                  string
++	targetsf              string
++	format                string
++	outputf               string
++	bodyf                 string
++	certf                 string
++	keyf                  string
++	rootCerts             csl
++	http2                 bool
++	h2c                   bool
++	insecure              bool
++	lazy                  bool
++	chunked               bool
++	duration              time.Duration
++	timeout               time.Duration
++	rate                  vegeta.Rate
++	workers               uint64
++	maxWorkers            uint64
++	workersOutput         string
++	workersTimelineOutput string
++	connections           int
++	maxConnections        int
++	redirects             int
++	maxBody               int64
++	headers               headers
++	proxyHeaders          headers
++	laddr                 localAddr
++	keepalive             bool
++	resolvers             csl
++	unixSocket            string
++	promAddr              string
++	dnsTTL                time.Duration
++	sessionTickets        bool
++	connectTo             map[string][]string
+ }
+ 
+ // attack validates the attack arguments, sets up the
+@@ -229,7 +235,106 @@ func attack(opts *attackOpts) (err error) {
+ 	sig := make(chan os.Signal, 1)
+ 	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
+ 
+-	return processAttack(atk, res, enc, sig, pm)
++	var stopWorkerTimeline func() error
++	if opts.workersTimelineOutput != "" {
++		stopWorkerTimeline, err = startWorkerTimelineOutput(opts.workersTimelineOutput, atk, time.Second)
++		if err != nil {
++			return err
++		}
++	}
++
++	processErr := processAttack(atk, res, enc, sig, pm)
++	if stopWorkerTimeline != nil {
++		if err := stopWorkerTimeline(); processErr == nil && err != nil {
++			processErr = err
++		}
++	}
++	if processErr != nil {
++		return processErr
++	}
++
++	if opts.workersOutput != "" {
++		return writeWorkersOutput(opts.workersOutput, opts.workers, opts.maxWorkers, atk.WorkersUsed())
++	}
++
++	return nil
++}
++
++type workersOutput struct {
++	InitialWorkers uint64 `json:"initial_workers"`
++	MaxWorkers     uint64 `json:"max_workers"`
++	WorkersUsed    uint64 `json:"workers_used"`
++}
++
++func writeWorkersOutput(path string, initial, max, used uint64) error {
++	out, err := file(path, true)
++	if err != nil {
++		return err
++	}
++	defer out.Close()
++
++	return json.NewEncoder(out).Encode(workersOutput{
++		InitialWorkers: initial,
++		MaxWorkers:     max,
++		WorkersUsed:    used,
++	})
++}
++
++func startWorkerTimelineOutput(path string, atk *vegeta.Attacker, interval time.Duration) (func() error, error) {
++	out, err := file(path, true)
++	if err != nil {
++		return nil, err
++	}
++
++	writer := bufio.NewWriter(out)
++	start := time.Now()
++	writeSample := func(now time.Time) error {
++		if _, err := fmt.Fprintf(writer, "%.9f,%d,%d\n", float64(now.UnixNano())/1e9, now.Sub(start).Milliseconds(), atk.WorkersUsed()); err != nil {
++			return err
++		}
++		return writer.Flush()
++	}
++
++	if _, err := writer.WriteString("timestamp_unix,elapsed_ms,workers_used\n"); err != nil {
++		out.Close()
++		return nil, err
++	}
++	if err := writeSample(start); err != nil {
++		out.Close()
++		return nil, err
++	}
++
++	stop := make(chan struct{})
++	done := make(chan error, 1)
++	go func() {
++		ticker := time.NewTicker(interval)
++		defer ticker.Stop()
++
++		for {
++			select {
++			case now := <-ticker.C:
++				if err := writeSample(now); err != nil {
++					done <- err
++					return
++				}
++			case <-stop:
++				err := writeSample(time.Now())
++				if flushErr := writer.Flush(); err == nil {
++					err = flushErr
++				}
++				if closeErr := out.Close(); err == nil {
++					err = closeErr
++				}
++				done <- err
++				return
++			}
++		}
++	}()
++
++	return func() error {
++		close(stop)
++		return <-done
++	}, nil
+ }
+ 
+ func processAttack(
+diff --git a/go.mod b/go.mod
+index 64e5c88..ff491e7 100644
+--- a/go.mod
++++ b/go.mod
+@@ -35,6 +35,8 @@ require (
+ 	github.com/prometheus/client_model v0.6.1 // indirect
+ 	github.com/prometheus/common v0.55.0 // indirect
+ 	github.com/prometheus/procfs v0.15.1 // indirect
++	github.com/shurcooL/httpfs v0.0.0-20230704072500-f1e31cf0ba5c // indirect
++	github.com/shurcooL/vfsgen v0.0.0-20230704071429-0000e147ea92 // indirect
+ 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a // indirect
+ 	golang.org/x/mod v0.19.0 // indirect
+ 	golang.org/x/sync v0.7.0 // indirect
+diff --git a/go.sum b/go.sum
+index a452a77..d334369 100644
+--- a/go.sum
++++ b/go.sum
+@@ -83,6 +83,10 @@ github.com/rs/dnscache v0.0.0-20211102005908-e0241e321417 h1:Lt9DzQALzHoDwMBGJ6v
+ github.com/rs/dnscache v0.0.0-20211102005908-e0241e321417/go.mod h1:qe5TWALJ8/a1Lqznoc5BDHpYX/8HU60Hm2AwRmqzxqA=
+ github.com/rs/dnscache v0.0.0-20230804202142-fc85eb664529 h1:18kd+8ZUlt/ARXhljq+14TwAoKa61q6dX8jtwOf6DH8=
+ github.com/rs/dnscache v0.0.0-20230804202142-fc85eb664529/go.mod h1:qe5TWALJ8/a1Lqznoc5BDHpYX/8HU60Hm2AwRmqzxqA=
++github.com/shurcooL/httpfs v0.0.0-20230704072500-f1e31cf0ba5c h1:aqg5Vm5dwtvL+YgDpBcK1ITf3o96N/K7/wsRXQnUTEs=
++github.com/shurcooL/httpfs v0.0.0-20230704072500-f1e31cf0ba5c/go.mod h1:owqhoLW1qZoYLZzLnBw+QkPP9WZnjlSWihhxAJC1+/M=
++github.com/shurcooL/vfsgen v0.0.0-20230704071429-0000e147ea92 h1:OfRzdxCzDhp+rsKWXuOO2I/quKMJ/+TQwVbIP/gltZg=
++github.com/shurcooL/vfsgen v0.0.0-20230704071429-0000e147ea92/go.mod h1:7/OT02F6S6I7v6WXb+IjhMuZEYfH/RJ5RwEWnEo5BMg=
+ github.com/streadway/quantile v0.0.0-20220407130108-4246515d968d h1:X4+kt6zM/OVO6gbJdAfJR60MGPsqCzbtXNnjoGqdfAs=
+ github.com/streadway/quantile v0.0.0-20220407130108-4246515d968d/go.mod h1:lbP8tGiBjZ5YWIc2fzuRpTaz0b/53vT6PEs3QuAWzuU=
+ github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
+diff --git a/lib/attack.go b/lib/attack.go
+index d2f1cf5..ec34f36 100644
+--- a/lib/attack.go
++++ b/lib/attack.go
+@@ -12,6 +12,7 @@ import (
+ 	"net/url"
+ 	"strconv"
+ 	"sync"
++	"sync/atomic"
+ 	"time"
+ 
+ 	"github.com/rs/dnscache"
+@@ -20,18 +21,19 @@ import (
+ 
+ // Attacker is an attack executor which wraps an http.Client
+ type Attacker struct {
+-	dialer     *net.Dialer
+-	client     http.Client
+-	stopch     chan struct{}
+-	stopOnce   sync.Once
+-	workers    uint64
+-	maxWorkers uint64
+-	maxBody    int64
+-	redirects  int
+-	seqmu      sync.Mutex
+-	seq        uint64
+-	began      time.Time
+-	chunked    bool
++	dialer      *net.Dialer
++	client      http.Client
++	stopch      chan struct{}
++	stopOnce    sync.Once
++	workers     uint64
++	maxWorkers  uint64
++	workersUsed uint64
++	maxBody     int64
++	redirects   int
++	seqmu       sync.Mutex
++	seq         uint64
++	began       time.Time
++	chunked     bool
+ }
+ 
+ const (
+@@ -112,6 +114,11 @@ func MaxWorkers(n uint64) func(*Attacker) {
+ 	return func(a *Attacker) { a.maxWorkers = n }
+ }
+ 
++// WorkersUsed returns the maximum number of workers used by the latest attack.
++func (a *Attacker) WorkersUsed() uint64 {
++	return atomic.LoadUint64(&a.workersUsed)
++}
++
+ // Connections returns a functional option which sets the number of maximum idle
+ // open connections per target host.
+ func Connections(n int) func(*Attacker) {
+@@ -450,6 +457,7 @@ func (a *Attacker) Attack(tr Targeter, p Pacer, du time.Duration, name string) <
+ 	if workers > a.maxWorkers {
+ 		workers = a.maxWorkers
+ 	}
++	atomic.StoreUint64(&a.workersUsed, workers)
+ 
+ 	atk := &attack{
+ 		name:  name,
+@@ -495,6 +503,7 @@ func (a *Attacker) Attack(tr Targeter, p Pacer, du time.Duration, name string) <
+ 				default:
+ 					// all workers are blocked. start one more and try again
+ 					workers++
++					atomic.StoreUint64(&a.workersUsed, workers)
+ 					wg.Add(1)
+ 					go a.attack(tr, atk, &wg, ticks, results)
+ 				}
