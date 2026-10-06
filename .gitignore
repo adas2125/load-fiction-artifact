@@ -55,6 +55,27 @@ __pycache__/
 /LG_failures/h2load/nghttp2-*.tar.*
 /LG_failures/h2load/notes.txt
 
+# xlg specific files
+/xlg/**/*.zip
+/xlg/**/*.tar
+/xlg/**/*.tar.gz
+/xlg/**/*.tar.xz
+/xlg/**/*.tgz
+/xlg/**/*_results*/
+/xlg/xlg_window_test/
+xlg/06_30_26_exp_server/
+xlg/cpu_jobs.json
+xlg/scripts/generate_targets.py
+xlg/targets*.txt
+
+# locally built binary
+/xlg/vegeta
+
+# metadata
+/xlg/**/.matplotlib/
+/xlg/**/.DS_Store
+/xlg/**/__MACOSX/
+
 # Generated experiment TLS files
 /LG_failures/k6_failure/key.pem
 /LG_failures/k6_failure/cert.pem
