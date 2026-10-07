@@ -42,26 +42,24 @@ if __name__ == "__main__":
     START_TIME = 20
     END_TIME = 50
 
-    DIR = "sut_arrivals/cpu_0_55/"
+    DIRS = ["sut_arrivals/cpu_0_55/", "sut_arrivals/cpu_0_7"]
 
-    arrival_rates_k6 = []  # Collect all rates for aggregation
+    arrival_rates_k6 = {DIR: [] for DIR in DIRS}  # Collect all rates for aggregation
     for run_id in range(1, 11):
         print(f"Processing run {run_id} with start_time={START_TIME} and end_time={END_TIME}")
-        csv_path = Path(DIR) / f"arrivals_{run_id}" / "arrivals.csv"
-        if csv_path.exists():
-            max_dev = get_arrival_rates(csv_path, start_time=START_TIME, end_time=END_TIME)
-            arrival_rates_k6.append(max_dev)
+        for DIR in DIRS:
+            csv_path = Path(DIR) / f"arrivals_{run_id}" / "arrivals.csv"
+            if csv_path.exists():
+                max_dev = get_arrival_rates(csv_path, start_time=START_TIME, end_time=END_TIME)
+                arrival_rates_k6[DIR].append(max_dev)
 
-    values_k6 = pd.Series(arrival_rates_k6, dtype=float).dropna()
-    n_k6 = len(values_k6)
+    for DIR in DIRS:
+        print(f"Results for {DIR}:")
+        values_k6 = pd.Series(arrival_rates_k6[DIR], dtype=float).dropna()
 
-    mean_k6 = values_k6.mean()
-    std_k6 = values_k6.std(ddof=1)
-    margin_k6 = t.ppf(0.975, df=n_k6 - 1) * std_k6 / n_k6**0.5
-
-    print(f"K6 runs: {n_k6}")
-    print(f"Mean deviation: {mean_k6:.2%}")
-    print(f"95% CI for mean: [{mean_k6 - margin_k6:.2%}, "
-        f"{mean_k6 + margin_k6:.2%}]")
-    print(f"p95 deviation: {values_k6.quantile(0.95):.2%}")
-    
+        if DIR == "sut_arrivals/cpu_0_55/":
+            max_dev = values_k6.max()
+            print(f"Max deviation: {max_dev:.2%}")
+        elif DIR == "sut_arrivals/cpu_0_7":
+            min_dev = values_k6.min()
+            print(f"Min deviation: {min_dev:.2%}")
