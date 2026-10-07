@@ -15,43 +15,62 @@ from xlg_eval_common import (
 # Constants and path configurations for the eval setup
 TRIM_S = 5.0
 THRESHOLDS_FILENAME = "stage_a_thresholds.json"
+
+# Microservices
 SERVER_CONFIGS = {
-    "ExpServer": {
-        "stage_a_paths": {
-            1000: Path(f"data copy/ExpServer_results/stage_a_fixed/run_20260426_011652/{THRESHOLDS_FILENAME}"),
-            2000: Path(f"data copy/ExpServer_results/stage_a_fixed/run_20260426_013506/{THRESHOLDS_FILENAME}"),
-            3000: Path(f"data copy/ExpServer_results/stage_a_fixed/run_20260426_015103/{THRESHOLDS_FILENAME}"),
-        },
-        "stage_b_paths": {
-            1000: Path("data copy/ExpServer_results/stage_b_variable/run_20260426_011652"),
-            2000: Path("data copy/ExpServer_results/stage_b_variable/run_20260426_013506"),
-            3000: Path("data copy/ExpServer_results/stage_b_variable/run_20260426_015103"),
-        },
-    },
     "HotelReservation": {
         "stage_a_paths": {
-            1000: Path(f"data copy/HotelReservation_results/hotelreservation_rps_1000/stage_a_fixed/run_20260426_180606/{THRESHOLDS_FILENAME}"),
-            1500: Path(f"data copy/HotelReservation_results/hotelreservation_rps_1500/stage_a_fixed/run_20260426_182130/{THRESHOLDS_FILENAME}"),
-            2000: Path(f"data copy/HotelReservation_results/hotelreservation_rps_2000/stage_a_fixed/run_20260426_190347/{THRESHOLDS_FILENAME}"),
+            1000: Path(f"data/HotelReservation_results/hotelreservation_rps_1000/stage_a_fixed/run_20260426_180606/{THRESHOLDS_FILENAME}"),
+            1500: Path(f"data/HotelReservation_results/hotelreservation_rps_1500/stage_a_fixed/run_20260426_182130/{THRESHOLDS_FILENAME}"),
+            2000: Path(f"data/HotelReservation_results/hotelreservation_rps_2000/stage_a_fixed/run_20260426_190347/{THRESHOLDS_FILENAME}"),
         },
         "stage_b_paths": {
-            1000: Path("data copy/HotelReservation_results/hotelreservation_rps_1000/stage_b_variable/run_20260426_180606"),
-            1500: Path("data copy/HotelReservation_results/hotelreservation_rps_1500/stage_b_variable/run_20260426_182130"),
-            2000: Path("data copy/HotelReservation_results/hotelreservation_rps_2000/stage_b_variable/run_20260426_190347"),
+            1000: Path("data/HotelReservation_results/hotelreservation_rps_1000/stage_b_variable/run_20260426_180606"),
+            1500: Path("data/HotelReservation_results/hotelreservation_rps_1500/stage_b_variable/run_20260426_182130"),
+            2000: Path("data/HotelReservation_results/hotelreservation_rps_2000/stage_b_variable/run_20260426_190347"),
         },
     },
     "SocialNetwork": {
         "stage_a_paths": {
-            1000: Path(f"data copy/SocialNetwork_results/stage_a_fixed/run_20260502_205729/{THRESHOLDS_FILENAME}"),
-            1500: Path(f"data copy/SocialNetwork_results/stage_a_fixed/run_20260502_211916/{THRESHOLDS_FILENAME}"),
-            2000: Path(f"data copy/SocialNetwork_results/stage_a_fixed/run_20260502_210830/{THRESHOLDS_FILENAME}"),
+            1000: Path(f"data/SocialNetwork_results/stage_a_fixed/run_20260502_205729/{THRESHOLDS_FILENAME}"),
+            1500: Path(f"data/SocialNetwork_results/stage_a_fixed/run_20260502_211916/{THRESHOLDS_FILENAME}"),
+            2000: Path(f"data/SocialNetwork_results/stage_a_fixed/run_20260502_210830/{THRESHOLDS_FILENAME}"),
         },
         "stage_b_paths": {
-            1000: Path("data copy/SocialNetwork_results/stage_b_variable/run_20260502_205729"),
-            1500: Path("data copy/SocialNetwork_results/stage_b_variable/run_20260502_211916"),
-            2000: Path("data copy/SocialNetwork_results/stage_b_variable/run_20260502_210830"),
+            1000: Path("data/SocialNetwork_results/stage_b_variable/run_20260502_205729"),
+            1500: Path("data/SocialNetwork_results/stage_b_variable/run_20260502_211916"),
+            2000: Path("data/SocialNetwork_results/stage_b_variable/run_20260502_210830"),
         },
     },
+}
+
+# ExpServer with different RPS
+SERVER_CONFIGS["ExpServer_diff_rps"] = {
+    "stage_a_paths": {
+        1000: Path(f"data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all_same_sut/rps_1000/stage_a/{THRESHOLDS_FILENAME}"),
+        2000: Path(f"data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all_same_sut/rps_2000/stage_a/{THRESHOLDS_FILENAME}"),
+        3000: Path(f"data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all_same_sut/rps_3000/stage_a/{THRESHOLDS_FILENAME}"),
+    },
+    "stage_b_paths": {
+        1000: Path("data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all_same_sut/rps_1000/stage_b_baseline"),
+        2000: Path("data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all_same_sut/rps_2000/stage_b_baseline"),
+        3000: Path("data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all_same_sut/rps_3000/stage_b_baseline"),
+    }
+
+}
+
+# ExpServer with different SUT profiles
+SERVER_CONFIGS["ExpServer_diff_sut"] = {
+    "stage_a_paths": {
+        1000: Path(f"data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all/rps_1000/stage_a/{THRESHOLDS_FILENAME}"),
+        2000: Path(f"data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all/rps_2000/stage_a/{THRESHOLDS_FILENAME}"),
+        3000: Path(f"data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all/rps_3000/stage_a/{THRESHOLDS_FILENAME}"),
+    },
+    "stage_b_paths": {
+        1000: Path("data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all/rps_1000/stage_b_baseline"),
+        2000: Path("data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all/rps_2000/stage_b_baseline"),
+        3000: Path("data/06_30_26_exp_server/paper_results_new/ExpServer_new_results_30s_all/rps_3000/stage_b_baseline"),
+    }
 }
 
 # labels for the figure
@@ -63,14 +82,11 @@ PAPER_LABELS = {
     "SUT_FASTER": "SuTFaster",
     "NORMAL": "Normal",
 }
-
 SEVERITIES = ['mild', 'mod', 'severe']
 TERMINALS = ['FEW_CONNECTIONS', 'FEW_WORKERS', 'CPU_CONTENTION']
 
-
 def paper_label(raw_label):
     return PAPER_LABELS.get(raw_label, raw_label.replace("_", " ").title())
-
 
 def plot_confusion_matrix_on_axis(ax, confusion_df, title):
     counts = confusion_df.to_numpy(dtype=float)
@@ -113,7 +129,6 @@ def plot_confusion_matrix_on_axis(ax, confusion_df, title):
     ax.set_title(title, fontsize=20, fontweight="bold", pad=14)
     return im
 
-
 def plot_confusion_matrices_paper(confusions_by_server):
     fig, axes = plt.subplots(
         1,
@@ -140,7 +155,6 @@ def plot_confusion_matrices_paper(confusions_by_server):
 
     fig.savefig("cross_rps_confusion_matrix.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
-
 
 def evaluate_stage_pair(stage_a_rate, stage_a_thresholds, stage_b_rate, stage_b_dir):
     stage_a_payload = read_json(stage_a_thresholds)
@@ -178,13 +192,16 @@ def evaluate_stage_pair(stage_a_rate, stage_a_thresholds, stage_b_rate, stage_b_
         predicted_label, _ = run_prediction_from_windows(windows)
 
         # find the index of the row where "transition_reason" is "terminal_latched"
-        if predicted_label in TERMINALS:
-            latched_rows = windows[windows["transition_reason"] == "terminal_latched"]
-            if not latched_rows.empty:
-                # organize by actual label and severity, then take the index of the first latched row
-                when_latched[actual_label][severity] = latched_rows.index[0]
-            else:
-                when_latched[actual_label][severity] = np.inf
+        try:
+            if predicted_label in TERMINALS:
+                latched_rows = windows[windows["transition_reason"] == "terminal_latched"]
+                if not latched_rows.empty:
+                    # organize by actual label and severity, then take the index of the first latched row
+                    when_latched[actual_label][severity] = latched_rows.index[0]
+                else:
+                    when_latched[actual_label][severity] = np.inf
+        except Exception as e:
+            print(f"Error processing run {item['run_dir']}: {e}")
 
         # add the result to the list of rows for this stage pair
         run_rows.append(
@@ -198,23 +215,36 @@ def evaluate_stage_pair(stage_a_rate, stage_a_thresholds, stage_b_rate, stage_b_
 
     return pd.DataFrame(run_rows), when_latched
 
-
 def cross_rps_confusion(stage_a_paths, stage_b_paths, server_name):
     pair_rows_cross_rps = []
     all_when_latched = {}
     for stage_a_rate in stage_a_paths.keys():
         for stage_b_rate in stage_b_paths.keys():
-            # only compare pairs where the stage A calibration rate is lower than the stage B rate
-            if stage_a_rate < stage_b_rate:
-                print(f"{server_name}: Stage A {stage_a_rate} --> Stage B {stage_b_rate}")
-                run_preds_df, when_latched = evaluate_stage_pair(
-                    stage_a_rate,
-                    stage_a_paths[stage_a_rate],
-                    stage_b_rate,
-                    stage_b_paths[stage_b_rate],
-                )
-                pair_rows_cross_rps.append(run_preds_df)
-                all_when_latched[(stage_a_rate, stage_b_rate)] = when_latched
+            if server_name == "ExpServer_diff_sut":
+                # evaluate on same-RPS pairs since this represents calibration against different SuT profile
+                if stage_a_rate == stage_b_rate:
+                    print(f"{server_name}: Stage A {stage_a_rate} --> Stage B {stage_b_rate}")
+                    run_preds_df, when_latched = evaluate_stage_pair(
+                        stage_a_rate,
+                        stage_a_paths[stage_a_rate],
+                        stage_b_rate,
+                        stage_b_paths[stage_b_rate],
+                    )
+                    pair_rows_cross_rps.append(run_preds_df)
+                    all_when_latched[(stage_a_rate, stage_b_rate)] = when_latched
+            else:
+                # only compare pairs where the stage A calibration rate is lower than the stage B rate
+                if stage_a_rate < stage_b_rate:
+                    print(f"{server_name}: Stage A {stage_a_rate} --> Stage B {stage_b_rate}")
+                    run_preds_df, when_latched = evaluate_stage_pair(
+                        stage_a_rate,
+                        stage_a_paths[stage_a_rate],
+                        stage_b_rate,
+                        stage_b_paths[stage_b_rate],
+                    )
+                    pair_rows_cross_rps.append(run_preds_df)
+                    all_when_latched[(stage_a_rate, stage_b_rate)] = when_latched
+    
     cross_rps_df = pd.concat(pair_rows_cross_rps, ignore_index=True)
     cross_rps_confusion = pd.crosstab(
         cross_rps_df["actual_label"],
