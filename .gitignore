@@ -79,3 +79,5 @@ xlg/targets*.txt
 # Generated experiment TLS files
 /LG_failures/k6_failure/key.pem
 /LG_failures/k6_failure/cert.pem
+
+/xlg/utils/
