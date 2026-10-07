@@ -33,26 +33,26 @@ type phaseSpec struct {
 var phaseSpecs = []phaseSpec{
 	{
 		Name:        "baseline",
-		BaseDelay:   10 * time.Millisecond,
+		BaseDelay:   50 * time.Millisecond,
 		Description: "Respond instantly enough to represent the healthy baseline.",
 	},
 	{
 		Name:         "degraded_100ms",
-		BaseDelay:    10 * time.Millisecond,
-		Description:  "Moderate slowdown ramp: starts at 10ms and adds 1ms every second, capped at 100ms.",
+		BaseDelay:    50 * time.Millisecond,
+		Description:  "Moderate slowdown ramp: starts at 50ms and adds 1ms every second, capped at 100ms.",
 		Step:         time.Millisecond,
 		StepInterval: time.Second,
-		MinDelay:     10 * time.Millisecond,
+		MinDelay:     50 * time.Millisecond,
 		MaxDelay:     100 * time.Millisecond,
 	},
 	{
 		Name:         "cache_warm_5ms",
-		BaseDelay:    10 * time.Millisecond,
-		Description:  "Speed-up ramp that mimics a warm cache: starts at 10ms and subtracts 1ms every second, capped at 5ms.",
+		BaseDelay:    50 * time.Millisecond,
+		Description:  "Speed-up ramp that mimics a warm cache: starts at 50ms and subtracts 1ms every second, capped at 5ms.",
 		Step:         -time.Millisecond,
 		StepInterval: time.Second,
 		MinDelay:     5 * time.Millisecond,
-		MaxDelay:     10 * time.Millisecond,
+		MaxDelay:     50 * time.Millisecond,
 	},
 	{
 		Name:        "worker_cap_100ms",
