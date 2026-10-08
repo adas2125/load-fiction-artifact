@@ -61,7 +61,7 @@ def phase_label(index, phase_schedule):
 def load_queue_wait(results_csv, phase_schedule):
     """Loads the queue wait times from the results.csv file and organizes them by phase intervals."""
     rows = []
-    # obtaining tupes of (arrival_ms, queue_wait_ms) for all samples in the results.csv
+    # obtaining tuples of (arrival_ms, queue_wait_ms) for all samples in the results.csv
     with results_csv.open(newline="") as f:
         for row in csv.reader(f):
             assert len(row) == len(CSV_COLUMNS), f"expected {len(CSV_COLUMNS)} columns in {results_csv}: {row}"
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     parser.add_argument("--duration", type=float, default=30.0, help="experiment duration in seconds")
     parser.add_argument("--delays", default="10ms,50ms,100ms,4s")
     parser.add_argument("--phase-schedule", type=parse_phase_schedule, default=parse_phase_schedule(DEFAULT_PHASE_SCHEDULE))
-    parser.add_argument("--runs", type=int, default=10, help="number of runs to compare (default: 1)")
+    parser.add_argument("--runs", type=int, default=10, help="number of runs to compare (default: 10)")
     args = parser.parse_args()
 
     delays_ms = [parse_duration_ms(part) for part in args.delays.split(",") if part.strip()]

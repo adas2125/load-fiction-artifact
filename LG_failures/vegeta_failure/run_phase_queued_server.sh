@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONCURRENCY="${CONCURRENCY:-2000}"
 RUN_ID="${RUN_ID:-1}"
 PORT="${PORT:-$((8080 + RUN_ID - 1))}"
-ADDR="${ADDR:-130.127.133.121:$PORT}"
+ADDR="${ADDR:-:$PORT}"
 SEED="${SEED:-$RUN_ID}" # set SEED to RUN_ID
 
 # Delay tiers

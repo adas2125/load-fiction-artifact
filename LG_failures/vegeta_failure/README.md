@@ -58,7 +58,7 @@ and initialize them with different seeds for request-handling randomization.
 On the LG VM, run the following command after setting the correct IP:
 
 ```sh
-VEGETA_CPUSET="0-39"  RPS=12000 ./experiment/phase_run_queued_sut_attack.sh
+VEGETA_CPUSET="0-55"  RPS=12000 ./experiment/phase_run_queued_sut_attack.sh
 ```
 
 #### 12K Vegeta Attack Against a Limited-Concurrency CPU on a Small Node

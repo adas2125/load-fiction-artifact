@@ -61,7 +61,6 @@ def plot_cpu_and_workers(cpu_df, workers_df, output_path, rps, run):
     ax_cpu.set_ylim(0, 105)
     ax_cpu.grid(True, linestyle=":", alpha=0.7)
 
-    # --- UPDATED LEGEND LOGIC ---
     # Combines the legends and places them above the plot horizontally
     cpu_lines, cpu_labels = ax_cpu.get_legend_handles_labels()
     worker_lines, worker_labels = ax_workers.get_legend_handles_labels()

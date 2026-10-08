@@ -1,6 +1,6 @@
 # Reproducing the h2load HTTP/2 Stream Concurrency Experiment
 
-This experiment measures how a server-side cap on concurrent HTTP/2 streams affects request throughput and arrival rates. The h2load client sends a target of **100 requests/second over 20 connections** to a Go HTTP/2 server. The server runs once with its default stream limit and once each with `max-streams` set to **100, 200, 256 and 300**.
+This experiment measures how a server-side cap on concurrent HTTP/2 streams affects request throughput and arrival rates. The h2load client sends a target of **100 requests/second per client over 20 connections (2K RPS total)** to a Go HTTP/2 server. The server runs once with its default stream limit and once each with `max-streams` set to **100, 200, 256 and 300**.
 
 ## Contents
 
@@ -112,7 +112,7 @@ Each run needs two terminals:
 |--------------------|-------------------------------------------------|
 | `-c 20`            | 20 concurrent connections                       |
 | `-m 50000`         | Up to 50,000 concurrent streams per session     |
-| `--rps=100`        | Target rate of 100 requests per second          |
+| `--rps=100`        | Target rate of 100 requests per second / client |
 | `--duration=50s`   | Run the benchmark for 50 seconds                |
 | `--log-file`       | Per-request TSV log                             |
 | `--output-file`    | Summary statistics as JSON                      |
@@ -123,7 +123,7 @@ Each run needs two terminals:
 
 ### 3.1 Baseline: default (no concurrency cap)
 
-No `-max-streams` flag is given, so the server uses its default of 50,000 streams per connection. At 100 req/s this limit is never reached, so the run is effectively uncapped.
+No `-max-streams` flag is given, so the server uses its default of 50,000 streams per connection. At 100 req/s per client this limit is never reached, so the run is effectively uncapped.
 
 **Terminal 1 (Server):**
 
@@ -252,16 +252,6 @@ The plotting script draws the cumulative arrival graph from a server log file. R
 ```bash
 python3 plot_cumulative_arrivals.py results_300/load_test.log -o out_300.png
 ```
-
-Optional arguments:
-
-| Flag                  | Effect                                                                 |
-|-----------------------|------------------------------------------------------------------------|
-| `-o out.png`          | Where to save the output PNG                                           |
-| `--title "..."`       | Chart title                                                            |
-| `--show`              | Open the chart in an interactive window                                |
-| `--no-phase-shading`  | Turn off the FAST/SLOW background shading                              |
-| `--ideal-rate 1500`   | Move the dashed "ideal rate" reference line (default 2000/s; `0` hides it) |
 
 To plot all five runs:
 

@@ -6,13 +6,12 @@ import os
 
 ROOT_DIR = "../../../Load Fiction (original)"
 directories = [
-    # f"/users/yugm2/cilantro/experiments/microservices/workdirs_eks",
     f"{ROOT_DIR}/workdirs_eks_wrk2dsb_40t_1000c",
     f"{ROOT_DIR}/workdirs_eks_wrk2dsb_40t_3000c",
     f"{ROOT_DIR}/workdirs_eks_wrk2_dsb_fixed",
     f"{ROOT_DIR}/workdirs_eks_wrk2_dsb_fixed_40t_1000c",
     f"{ROOT_DIR}/workdirs_eks_wrk2_dsb_fixed_40t_3000c",
-    f"{ROOT_DIR}/workdirs_eks_k6_3000prevu",    # CHANGE LOG: ADDED
+    f"{ROOT_DIR}/workdirs_eks_k6_3000prevu",  
     f"{ROOT_DIR}/workdirs_eks_k6_1500prevu",
     f"{ROOT_DIR}/workdirs_eks_k6_6000prevu",
     f"{ROOT_DIR}/workdirs_eks_vegeta"

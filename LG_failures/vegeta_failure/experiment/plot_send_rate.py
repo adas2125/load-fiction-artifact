@@ -90,14 +90,8 @@ def plot_send_rates(run_rates, output_path, rps, duration_s=None):
         frameon=False
     )
 
-    # Remove fig.tight_layout() and replace with explicit layout tuning
-    # This leaves 15% padding at the top of the canvas for the legend text
     fig.subplots_adjust(top=0.85)
-
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    
-    # The bbox_inches="tight" here is critical—it tells matplotlib to recalculate
-    # the bounding box including the elements that sit outside the standard axis lines.
     pdf_output = output_path.with_suffix('.pdf')
     fig.savefig(pdf_output, format='pdf', dpi=300, bbox_inches="tight")
     

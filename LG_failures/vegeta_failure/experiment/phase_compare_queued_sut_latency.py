@@ -91,7 +91,7 @@ def write_plot(path, truth_values_by_name, run_values_by_name, hdr_points_by_nam
         percentiles = [pct for pct, _, _ in hdr_points]
         x = [one_by for _, _, one_by in hdr_points]
 
-        # drawing the the truth curve for the truth points
+        # drawing the truth curve for the truth points
         y = percentile_curve(truth_values, percentiles)
 
         # plotting on the truth_ax and combined_ax with dashed lines for the truth curve

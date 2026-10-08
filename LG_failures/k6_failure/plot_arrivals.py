@@ -49,7 +49,6 @@ def get_avg_rates(exp_dir, num_runs=10):
     return avg_rates
 
 def plot_aggregate_rate(num_runs=10, start_time=0, end_time=DURATION_SECONDS):
-    """Generated using Gemini for plotting"""
 
     # ACM Paper Styling Requirements
     plt.rcParams.update({

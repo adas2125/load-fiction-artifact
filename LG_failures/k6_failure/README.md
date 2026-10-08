@@ -64,7 +64,7 @@ All server instances on this machine can share `cert.pem` and `key.pem`, includi
 
 ### Start five fresh SUT instances
 
-In the paper, we do ten trials, but for this demo, you can use 5. Run each command in a separate terminal on the SUT machine. Set `ADDR` explicitly because the launcher has a different default IP and otherwise uses the same port for every `RUN_ID`.
+In the paper, we do ten trials, but for this demo, you can use 5. Run each command in a separate terminal on the SUT machine. Set `ADDR` explicitly. Servers on the SUT should be listening on different ports.
 
 ```bash
 RUN_ID=1 ./run_phase_queued_server.sh
@@ -153,7 +153,7 @@ sut_arrivals/
 `plot_arrivals.py` defaults to ten runs. For the five-run examples above, invoke its plotting function with five runs:
 `count_arrivals.py` counts the number of arrivals assigned a given delay at the SUT
 
-Run the following ot see arrival patterns
+Run the following to see arrival patterns
 
 ```bash
 python3 plot_arrivals.py

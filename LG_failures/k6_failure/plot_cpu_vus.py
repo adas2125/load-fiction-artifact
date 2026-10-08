@@ -108,7 +108,6 @@ if __name__ == "__main__":
             vus_x.append(rel_t)
             vus_y.append(v)
 
-    # --- ACM Paper Styling Configuration --- (Gemini)
     plt.rcParams.update({
         'font.size': 10,
         'axes.labelsize': 10,

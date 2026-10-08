@@ -12,14 +12,6 @@ Our main contributions are:
 
 Experiments are summarized in the `README.md` files associated with `experiments_eval` and `experiments_eval_silent`.
 
-## Data
-The raw data required to reproduce the results is available below:
-[SocialNetwork](https://drive.google.com/file/d/1FSCQ2heOoFnNUHjZLQ_mCgsbo8xmR9SP/view?usp=sharing)
-[HotelReservation](https://drive.google.com/file/d/1ivCBOKiD2NYkqFF1_iCmtreN1Ru9ZuDK/view?usp=sharing)
-[ExpServer](https://drive.google.com/file/d/1z9X0IpRemRvwSpJZHy499Qzig5R1_gzX/view?usp=sharing)
-Unzip these files, store them in the data/ folder and run `stage_b_cross_rps.py` for the full 
-offline evaluation from logs captued online during the run.
-
 ## Streaming XLG Experiment
 
 The main streaming experiment is provided in:

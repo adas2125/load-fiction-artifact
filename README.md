@@ -15,13 +15,4 @@ This repository contains code for the short paper **“Load Fiction: How Your Lo
 
 ## Getting started
 
-Clone the artifact repository:
-
-```bash
-git clone https://github.com/adas2125/load-fiction-artifact.git
-cd load-fiction-artifact
-```
-
-Choose an experiment from the table above and follow its README for dependencies, source initialization, builds, server setup, execution, and plotting.
-
-The repository references DeathStarBench, k6, and Vegeta source repositories as Git submodules. Follow the selected experiment's instructions to initialize and build the required sources.
+Clone this repository. Choose an experiment from the table above and follow its README for dependencies, source initialization, builds, server setup, execution, and plotting. The repository references DeathStarBench, k6, and Vegeta source repositories as Git submodules. Follow the selected experiment's instructions to initialize and build the required sources.
