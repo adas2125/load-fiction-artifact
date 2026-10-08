@@ -10,7 +10,7 @@ This repository contains code for the short paper **“Load Fiction: How Your Lo
 | [`LG_failures/h2load/`](LG_failures/h2load/README.md) | Tests how server-side HTTP/2 stream concurrency limits affect throughput and request arrivals. |
 | [`LG_failures/k6_failure/`](LG_failures/k6_failure/README.md) | Investigates k6 arrival timing and latency measurements under different client CPU allocations, using HTTPS and connection churn. |
 | [`LG_failures/vegeta_failure/`](LG_failures/vegeta_failure/README.md) | Examines Vegeta request delivery and latency measurements against a phase-shifting server with limited concurrency. |
-| [`xlg/`](xlg/README.md) | an observability layer built on top of Vegeta to diagnose bottlenecks in LG runs. |
+| [`xlg/`](xlg/README.md) | an observability layer built on top of Vegeta to diagnose LG bottlenecks. |
 | [`cilantro_experiment`](cilantro_experiment/README.md) | Highlights the impact that load generator failures may have on experimental results of the Cilantro paper. |
 
 ## Getting started
