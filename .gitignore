@@ -1,0 +1,86 @@
+# Experiment data and logs
+*.csv
+*.csv.gz
+*.tsv
+*.tsv.gz
+*.log
+*.gob
+*.hdr
+*.hgr
+
+# Figures
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+*.pdf
+*.eps
+*.tif
+*.tiff
+
+# Generated result directories, at any depth
+results/
+results_*/
+output/
+outputs/
+figures/
+plots/
+arrivals_*/
+sut_arrivals/
+phase-smooth-data/
+experiments_phase_queued_sut*/
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# k6 specific
+/LG_failures/k6_failure/setup_cloudlab.sh
+
+# vegeta specific
+/LG_failures/vegeta_failure/experiment/verify_model.py
+/LG_failures/vegeta_failure/experiment/verify_assigned_delays.py
+
+# Locally built binaries
+/LG_failures/wrk2_dsb/burst-server
+/LG_failures/k6_failure/k6
+/LG_failures/k6_failure/bin/
+/LG_failures/vegeta_failure/vegeta
+/LG_failures/vegeta_failure/bin/
+
+# Downloaded nghttp2 source and archives
+/LG_failures/h2load/nghttp2-*/
+/LG_failures/h2load/nghttp2-*.tar.*
+/LG_failures/h2load/notes.txt
+
+# xlg specific files
+/xlg/**/*.zip
+/xlg/**/*.tar
+/xlg/**/*.tar.gz
+/xlg/**/*.tar.xz
+/xlg/**/*.tgz
+/xlg/**/*_results*/
+/xlg/xlg_window_test/
+xlg/06_30_26_exp_server/
+xlg/cpu_jobs.json
+xlg/scripts/generate_targets.py
+xlg/targets*.txt
+
+# locally built binary
+/xlg/vegeta
+
+# metadata
+/xlg/**/.matplotlib/
+/xlg/**/.DS_Store
+/xlg/**/__MACOSX/
+
+# Generated experiment TLS files
+/LG_failures/k6_failure/key.pem
+/LG_failures/k6_failure/cert.pem
+
+/xlg/utils/
+/LG_failures/k6_failure/results.zip
+/LG_failures/vegeta_failure/experiments_phase_queued_sut.zip
+/xlg/.gitignore
