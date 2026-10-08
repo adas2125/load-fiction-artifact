@@ -16,3 +16,8 @@ This repository contains code for the short paper **“Load Fiction: How Your Lo
 ## Getting started
 
 Clone this repository. Choose an experiment from the table above and follow its README for dependencies, source initialization, builds, server setup, execution, and plotting. The repository references DeathStarBench, k6, and Vegeta source repositories as Git submodules. Follow the selected experiment's instructions to initialize and build the required sources.
+
+## Data Availability
+
+Please contact the authors to obtain the raw data collected to reproduce figures
+and values mentioned in the paper.
